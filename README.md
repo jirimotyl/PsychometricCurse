@@ -1,1 +1,1 @@
-# PsychometricCurse_Package
+# PsychometricCurse
