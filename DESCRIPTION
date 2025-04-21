@@ -1,0 +1,23 @@
+Package: PsychometricCurse
+Type: Package
+Title: Normative Evaluation of Data from (Neuro)Psychological Assessments 
+Version: 0.0.1
+Authors@R: 
+  person("Jiri", "Motyl", email = "jiri.motyl@vfn.cz",  
+  role = c("aut", "cre"), 
+  comment = c(ORCID = "0000-0002-7315-1251"))
+Maintainer: Jiri Motyl, PhD <jiri.motyl@vfn.cz>
+Description: PsychometricCurse transforms total scores obtained from (neuro)psychological assessment to normalised values based on the selected normative dataset. Its aim is to provide clinicans an easy tool that can help with repetitive tasks in the process of assessment results interpretation. 
+License: GNU GENERAL PUBLIC LICENSE (GPL-3.0 license)
+Encoding: UTF-8
+URL: https://github.com/jirimotyl/PsychometricCurse
+BugReports: https://github.com/jirimotyl/PsychometricCurse/issues 
+LazyData: true
+Imports:
+    lubridate, 
+    papaja, 
+    readr, 
+    tinylabels, 
+    stringr, 
+    nleqslv
+RoxygenNote: 7.3.2
