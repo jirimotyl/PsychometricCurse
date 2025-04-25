@@ -1,24 +1,39 @@
-#' Text evaluation of a provided Z-Score value
+#' Descriptive Evaluation of a Provided Z-Score Value
 #'
-#' This returns a text description of the given Z-score
-#' Whether it is above/below average, or within the average.
+#' This function returns a text description of the given Z-score, indicating whether it is above average, below average, or within the average range.
 #'
-#' @inheritParams z_eval
-#' @return Text interpretation of the given Z-Score, in the selected language.
-#' @seealso [stringi::stri_length()] which this function wraps.
+#' @param z A numeric value representing the Z-score to be evaluated.
+#' @param lang A character string specifying the language for the description. Currently supported languages are "en" (English) and "cs" (Czech). Default is "en".
+#' @return A character string providing a text interpretation of the given Z-score in the selected language.
 #' @export
 #' @examples
-#' z_eval(-1.52)
-#' z_eval(1.23, lang = "en")
-#' z_eval(0.1, lang = "cs")
+#' zscore_eval(-1.52)
+#' zscore_eval(1.23, lang = "en")
+#' zscore_eval(0.1, lang = "cs")
 
-z_eval <- function(z, lang = "en") {
+zscore_eval <- function(z, lang = "en") {
+  # Check if z is NA
+  if (is.na(z)) {
+    return(NA)
+  }
+
+  # Define the breaks for Z-score categories
   breaks <- c(-Inf, -2, -1.2, -0.8, 0.8, 1.2, 2, Inf)
+
+  # Define the labels for each language
   labels_lookup <- list(
     en = c("Extremely Below Average", "Below Average", "Lower Average", "Average", "Higher Average", "Above Average", "High Above Average"),
     cs = c("extrémní podprůměr", "podprůměr", "nižší průměr", "průměr", "vyšší průměr", "nadprůměr", "vysoký nadprůměr")
   )
+
+  # Check if the specified language is supported
+  if (!(lang %in% names(labels_lookup))) {
+    stop("Unsupported language. Supported languages are: ", toString(names(labels_lookup)))
+  }
+
+  # Get the labels for the specified language
   labels <- labels_lookup[[lang]]
+
+  # Return the description based on the Z-score
   cut(z, breaks = breaks, labels = labels, right = FALSE)
 }
-
