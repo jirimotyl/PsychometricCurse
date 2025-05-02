@@ -20,23 +20,20 @@
 #' @param race An optional character value representing the race of the individual (default is NULL).
 #' @param laterality An optional character value representing the laterality of the individual (default is NULL).
 #' @param lang A character string specifying the language for outputs (default is "en").
-#'
 #' @return A tibble containing the calculated scores and their confidence intervals.
 #' The tibble includes the following columns:
-#'   - `score_type`: The type of score (e.g., total_score, z_score, t_score, scaled_score, percentile).
+#'   - `score_type`: The type of score (e.g., total_score, z_score, t_score, scaled, percentile).
 #'   - `score`: The calculated scores (total_score, z_score, t_score, scaled_score, percentile).
 #'   - `ci_lower`: The lower bounds of the confidence intervals for each score.
 #'   - `ci_upper`: The upper bounds of the confidence intervals for each score.
 #'   - `rel`: The reliability coefficient.
 #'   - `rtm`: The regression towards the mean indicator.
 #'   - `ci`: The confidence interval percentage.
-#'
+#' @export
 #' @examples
 #' # Example usage of the curse function
 #' results <- curse(total_score = 75, m = 80, sd = 5)
 #' print(results)
-#'
-#' @export
 
 
 curse <- function(total_score, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95,
