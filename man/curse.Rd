@@ -56,8 +56,6 @@ curse(
 \item{laterality}{An optional character value representing the laterality of the individual (default is NULL).}
 
 \item{lang}{A character string specifying the language for outputs (default is "en").}
-
-\item{data}{An optional dataset for additional data (default is NULL).}
 }
 \value{
 A tibble containing the calculated scores and their confidence intervals.
