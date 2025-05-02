@@ -33,7 +33,7 @@ curse <- function(total_score, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci =
 
   # Create a tibble with the results
   results_tibble <- tibble(
-    score_type = c("Total Score", "Z-Score", "T-Score", "Scaled Score", "Percentile"),
+    score_type = c("total_score", "z_score", "t_score", "scaled", "percentile"),
     score = c(total_score, z_score, t_score, scaled_score, percentile),
     ci_lower = c(total_score_ci[[1]], z_score_ci[[1]], t_score_ci[[1]], scaled_score_ci[[1]], percentile_ci[[1]]),
     ci_upper = c(total_score_ci[[2]], z_score_ci[[2]], t_score_ci[[2]], scaled_score_ci[[2]], percentile_ci[[2]]),
