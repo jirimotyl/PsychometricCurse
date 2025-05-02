@@ -14,8 +14,9 @@
 #' convert_standard_score(120, from = "iq", to = "stanine")
 #' convert_standard_score(75, from = "custom", to = "z_score", m = 80, sd = 5)
 convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
-  from <- match.arg(from)
-  to <- match.arg(to)
+  valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
+  from <- match.arg(from, choices = valid_types)
+  to <- match.arg(to, choices = valid_types)
 
   # Define the parameters for each score type
   score_params <- list(
