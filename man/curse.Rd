@@ -20,8 +20,7 @@ curse(
   edu_level = NULL,
   race = NULL,
   laterality = NULL,
-  lang = "en",
-  data
+  lang = "en"
 )
 }
 \arguments{
