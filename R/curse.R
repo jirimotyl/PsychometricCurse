@@ -20,7 +20,6 @@
 #' @param race An optional character value representing the race of the individual (default is NULL).
 #' @param laterality An optional character value representing the laterality of the individual (default is NULL).
 #' @param lang A character string specifying the language for outputs (default is "en").
-#' @param data An optional dataset for additional data (default is NULL).
 #'
 #' @return A tibble containing the calculated scores and their confidence intervals.
 #' The tibble includes the following columns:
@@ -43,7 +42,7 @@
 curse <- function(total_score, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95,
                   normative_dataset = NULL, age = NULL, dob = NULL, doa = NULL,
                   sex = NULL, edu_years = NULL, edu_level = NULL, race = NULL,
-                  laterality = NULL, lang = "en", data) {
+                  laterality = NULL, lang = "en") {
 
   # Check if necessary parameters are provided
   if (is.null(m) || is.null(sd) || is.null(total_score)) {
