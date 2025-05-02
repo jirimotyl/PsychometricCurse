@@ -60,7 +60,7 @@ curse(
 \value{
 A tibble containing the calculated scores and their confidence intervals.
 The tibble includes the following columns:
-  - `score_type`: The type of score (e.g., total_score, z_score, t_score, scaled_score, percentile).
+  - `score_type`: The type of score (e.g., total_score, z_score, t_score, scaled, percentile).
   - `score`: The calculated scores (total_score, z_score, t_score, scaled_score, percentile).
   - `ci_lower`: The lower bounds of the confidence intervals for each score.
   - `ci_upper`: The upper bounds of the confidence intervals for each score.
@@ -77,5 +77,4 @@ between different score types, including z-score, t-score, scaled score, and per
 # Example usage of the curse function
 results <- curse(total_score = 75, m = 80, sd = 5)
 print(results)
-
 }
