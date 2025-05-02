@@ -1,8 +1,44 @@
-# curse
-#
-#   Install Package:           'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Calculate Standard Scores and Confidence Intervals
+#'
+#' The `curse` function calculates various standard scores and their confidence intervals
+#' based on a given total score, mean, and standard deviation. It supports conversion
+#' between different score types, including z-score, t-score, scaled score, and percentile.
+#'
+#' @param total_score A numeric value representing the total score to be converted.
+#' @param m A numeric value representing the mean of the custom distribution. Required for conversion.
+#' @param sd A numeric value representing the standard deviation of the custom distribution. Required for conversion.
+#' @param rel A numeric value representing the reliability coefficient (default is 0.85).
+#' @param rtm A logical value indicating whether to account for regression towards the mean (default is TRUE).
+#' @param ci A numeric value representing the confidence interval percentage (default is 95).
+#' @param normative_dataset An optional dataset for normative comparisons (default is NULL).
+#' @param age An optional numeric value representing the age of the individual (default is NULL).
+#' @param dob An optional date value representing the date of birth of the individual (default is NULL).
+#' @param doa An optional date value representing the date of assessment (default is NULL).
+#' @param sex An optional character value representing the sex of the individual (default is NULL).
+#' @param edu_years An optional numeric value representing the years of education (default is NULL).
+#' @param edu_level An optional character value representing the education level (default is NULL).
+#' @param race An optional character value representing the race of the individual (default is NULL).
+#' @param laterality An optional character value representing the laterality of the individual (default is NULL).
+#' @param lang A character string specifying the language for outputs (default is "en").
+#' @param data An optional dataset for additional data (default is NULL).
+#'
+#' @return A tibble containing the calculated scores and their confidence intervals.
+#' The tibble includes the following columns:
+#'   - `score_type`: The type of score (e.g., total_score, z_score, t_score, scaled_score, percentile).
+#'   - `score`: The calculated scores (total_score, z_score, t_score, scaled_score, percentile).
+#'   - `ci_lower`: The lower bounds of the confidence intervals for each score.
+#'   - `ci_upper`: The upper bounds of the confidence intervals for each score.
+#'   - `rel`: The reliability coefficient.
+#'   - `rtm`: The regression towards the mean indicator.
+#'   - `ci`: The confidence interval percentage.
+#'
+#' @examples
+#' # Example usage of the curse function
+#' results <- curse(total_score = 75, m = 80, sd = 5)
+#' print(results)
+#'
+#' @export
+
 
 curse <- function(total_score, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95,
                   normative_dataset = NULL, age = NULL, dob = NULL, doa = NULL,
