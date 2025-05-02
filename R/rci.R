@@ -4,28 +4,32 @@
 #'
 #' @param total_score A numeric value representing the current total score.
 #' @param total_score_old A numeric value representing the previous total score.
-#' @param score_type An optional character string specifying the type of standard score. Supported types are "z_score", "t_score", "sten", "stanine", "iq", and "scaled". If provided, m and sd are set automatically. Default is NULL, which requires m and sd to be specified.
-#' @param m An optional numeric value representing the normative mean score. Required only if score_type is NULL.
-#' @param sd An optional numeric value representing the standard deviation of the normative mean score. Required only if score_type is NULL.
+#' @param score_type An optional character string specifying the type of standard score. Supported types are "z_score", "t_score", "sten", "stanine", "iq", and "scaled". If provided, M and SD are set automatically. Default is NULL, which requires M and SD to be specified.
+#' @param M An optional numeric value representing the normative mean score. Required only if score_type is NULL.
+#' @param SD An optional numeric value representing the standard deviation of the normative mean score. Required only if score_type is NULL.
 #' @param rel A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.
 #' @param rel_old An optional numeric value between 0 and 1 representing the reliability of the old (different) test. If provided, the function calculates RCI for two different tests.
 #' @param rtm A logical value indicating whether to adjust for regression towards the mean (TRUE) or not (FALSE). Default is TRUE.
 #' @param ci A numeric value representing the confidence interval percentage. Default is 95.
 #' @param rci_method An integer value indicating the method to calculate the standard error. Default is 1. Use 1 for Lord & Novick (1968) approach, 2 for Jacobson & Truax (1991) approach.
 #' @param lang A character string specifying the language for the description. Currently supported languages are "en" (English) and "cs" (Czech). Default is "en".
+#' @param time A logical value indicating whether a lower score represents a better result (TRUE for time-based tests). Default is FALSE.
 #' @return A list containing the evaluation result (`evaluation_result`), the tested change (`tested_change`), the standard error (of prediction or difference) with confidence interval (`standard_error_with_CI`), the regression towards the mean adjustment (`regression_towards_mean`), the confidence interval percentage (`confidence_interval`), and the RCI method used (`rci_method`). Returns NA if `total_score` or `total_score_old` is NA.
 #' @export
 #' @examples
-#' # Example with custom m and sd
-#' rci(m = 70, sd = 10, total_score = 85, total_score_old = 80)
+#' # Example with custom M and SD
+#' rci(M = 70, SD = 10, total_score = 85, total_score_old = 80)
 #'
-#' # Example with score_type, no need to specify m and sd
+#' # Example with score_type, no need to specify M and SD
 #' rci(total_score = 55, total_score_old = 50, score_type = "t_score")
 #'
 #' # Example with score_type and additional parameters
 #' rci(total_score = 12, total_score_old = 10, rtm = FALSE, ci = 90, rci_method = 2, lang = "cs", score_type = "scaled")
+#'
+#' # Example with time parameter for time-based test
+#' rci(total_score = 85, total_score_old = 90, score_type = "t_score", time = TRUE)
 
-rci <- function(total_score, total_score_old, score_type = NULL, m = NULL, sd = NULL, rel = 0.85, rel_old = NULL, rtm = TRUE, ci = 95, rci_method = 1, lang = "en") {
+rci <- function(total_score, total_score_old, score_type = NULL, m = NULL, sd = NULL, rel = 0.85, rel_old = NULL, rtm = TRUE, ci = 95, rci_method = 1, lang = "en", time = FALSE) {
   # Early parameter validation
   if (is.na(total_score) || is.na(total_score_old)) {
     return(NA)
@@ -125,12 +129,24 @@ rci <- function(total_score, total_score_old, score_type = NULL, m = NULL, sd = 
   labels <- labels_lookup[[lang]]
 
   # Determine evaluation result
-  if (tested_change > sep_ci) {
-    eval <- labels[1]
-  } else if (tested_change <= sep_ci & tested_change >= -sep_ci) {
-    eval <- labels[2]
+  if (time) {
+    # For time-based tests, a lower score is better
+    if (tested_change < -sep_ci) {
+      eval <- labels[1]
+    } else if (tested_change <= sep_ci & tested_change >= -sep_ci) {
+      eval <- labels[2]
+    } else {
+      eval <- labels[3]
+    }
   } else {
-    eval <- labels[3]
+    # For standard tests, a higher score is better
+    if (tested_change > sep_ci) {
+      eval <- labels[1]
+    } else if (tested_change <= sep_ci & tested_change >= -sep_ci) {
+      eval <- labels[2]
+    } else {
+      eval <- labels[3]
+    }
   }
 
   # Return results with clear naming

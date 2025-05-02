@@ -29,6 +29,7 @@
 #'   - `rel`: The reliability coefficient.
 #'   - `rtm`: The regression towards the mean indicator.
 #'   - `ci`: The confidence interval percentage.
+#' @import tibble
 #' @export
 #' @examples
 #' # Example usage of the curse function
