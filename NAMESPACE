@@ -2,5 +2,6 @@
 
 export(ci_calc)
 export(convert_standard_score)
+export(curse)
 export(rci)
 export(zscore_eval)
