@@ -8,8 +8,8 @@ rci(
   total_score,
   total_score_old,
   score_type = NULL,
-  M = NULL,
-  SD = NULL,
+  m = NULL,
+  sd = NULL,
   rel = 0.85,
   rel_old = NULL,
   rtm = TRUE,
@@ -23,11 +23,11 @@ rci(
 
 \item{total_score_old}{A numeric value representing the previous total score.}
 
-\item{score_type}{An optional character string specifying the type of standard score. Supported types are "z_score", "t_score", "sten", "stanine", "iq", and "scaled". If provided, M and SD are set automatically. Default is NULL, which requires M and SD to be specified.}
+\item{score_type}{An optional character string specifying the type of standard score. Supported types are "z_score", "t_score", "sten", "stanine", "iq", and "scaled". If provided, m and sd are set automatically. Default is NULL, which requires m and sd to be specified.}
 
-\item{M}{An optional numeric value representing the normative mean score. Required only if score_type is NULL.}
+\item{m}{An optional numeric value representing the normative mean score. Required only if score_type is NULL.}
 
-\item{SD}{An optional numeric value representing the standard deviation of the normative mean score. Required only if score_type is NULL.}
+\item{sd}{An optional numeric value representing the standard deviation of the normative mean score. Required only if score_type is NULL.}
 
 \item{rel}{A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.}
 
@@ -42,16 +42,16 @@ rci(
 \item{lang}{A character string specifying the language for the description. Currently supported languages are "en" (English) and "cs" (Czech). Default is "en".}
 }
 \value{
-A list containing the evaluation result, the tested change, and the standard error supplemented with confidence interval. Returns NA if total_score or total_score_old is NA.
+A list containing the evaluation result (`evaluation_result`), the tested change (`tested_change`), the standard error (of prediction or difference) with confidence interval (`standard_error_with_CI`), the regression towards the mean adjustment (`regression_towards_mean`), the confidence interval percentage (`confidence_interval`), and the RCI method used (`rci_method`). Returns NA if `total_score` or `total_score_old` is NA.
 }
 \description{
 This function calculates and returns the reliable change index, indicating whether the change in scores is statistically significant. It handles both single and two-test scenarios based on the provided parameters and supports different standard score types.
 }
 \examples{
-# Example with custom M and SD
-rci(M = 70, SD = 10, total_score = 85, total_score_old = 80)
+# Example with custom m and sd
+rci(m = 70, sd = 10, total_score = 85, total_score_old = 80)
 
-# Example with score_type, no need to specify M and SD
+# Example with score_type, no need to specify m and sd
 rci(total_score = 55, total_score_old = 50, score_type = "t_score")
 
 # Example with score_type and additional parameters

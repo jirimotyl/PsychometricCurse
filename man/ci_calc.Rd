@@ -4,14 +4,14 @@
 \alias{ci_calc}
 \title{Calculation of Confidence Interval (CI)}
 \usage{
-ci_calc(M, SD, total_score, rel = 0.85, rtm = TRUE, ci = 95)
+ci_calc(total_score, m, sd, rel = 0.85, rtm = TRUE, ci = 95)
 }
 \arguments{
-\item{M}{A numeric value representing the normative mean score.}
-
-\item{SD}{A numeric value representing the standard deviation of the normative mean score.}
-
 \item{total_score}{A numeric value representing the total score for which the confidence interval is to be calculated.}
+
+\item{m}{A numeric value representing the normative mean score.}
+
+\item{sd}{A numeric value representing the standard deviation of the normative mean score.}
 
 \item{rel}{A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.}
 
@@ -26,7 +26,7 @@ A numeric vector containing the lower and upper confidence interval values for t
 This function calculates and returns the lower and upper confidence interval around the provided total score.
 }
 \examples{
-ci_calc(M = 70, SD = 10, total_score = 80)
-ci_calc(M = 70, SD = 10, total_score = 80, rel = 0.9, rtm = FALSE, ci = 90)
-ci_calc(M = 0, SD = 1, total_score = -1.25)
+ci_calc(total_score = 80, m = 70, sd = 10)
+ci_calc(total_score = 80, m = 70, sd = 10, rel = 0.9, rtm = FALSE, ci = 90)
+ci_calc(total_score = -1.25, m = 0, sd = 1)
 }
