@@ -13,7 +13,8 @@
 #' convert_standard_score(65, from = "t_score", to = "iq")
 #' convert_standard_score(120, from = "iq", to = "stanine")
 #' convert_standard_score(75, from = "custom", to = "z_score", m = 80, sd = 5)
-
+#'
+#'
 convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
   from <- match.arg(from, choices = valid_types)
@@ -31,41 +32,76 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
     custom = c(mean = m, sd = sd)
   )
 
-  # Check if m and sd are provided when using custom
-  if (from == "custom" && (is.null(m) || is.null(sd))) {
-    stop("m and sd must be provided when `from` is 'custom'.")
+  # Check if m and sd are provided and valid when using custom
+  if (from == "custom" && (is.null(m) || is.null(sd) || sd <= 0)) {
+    stop("m and positive sd must be provided when `from` is 'custom'.")
   }
-  if (to == "custom" && (is.null(m) || is.null(sd))) {
-    stop("m and sd must be provided when `to` is 'custom'.")
+  if (to == "custom" && (is.null(m) || is.null(sd) || sd <= 0)) {
+    stop("m and positive sd must be provided when `to` is 'custom'.")
   }
 
-  # Vectorized conversion
-  converted_score <- sapply(score, function(s) {
-    # Convert the input score to a z-score
-    if (from == "percentile") {
-      z_score <- qnorm(s / 100)
-    } else {
-      params <- score_params[[from]]
-      z_score <- (s - params["mean"]) / params["sd"]
+  # Vectorized lookup for sten
+  z_to_sten <- function(z) {
+    sten <- rep(NA_real_, length(z))
+    sten[z < -2.0] <- 1
+    sten[z >= -2.0 & z < -1.25] <- 2
+    sten[z >= -1.25 & z < -0.75] <- 3
+    sten[z >= -0.75 & z < -0.25] <- 4
+    sten[z >= -0.25 & z < 0.25] <- 5
+    sten[z >= 0.25 & z < 0.75] <- 6
+    sten[z >= 0.75 & z < 1.25] <- 7
+    sten[z >= 1.25 & z < 2.0] <- 8
+    sten[z >= 2.0 & z < 2.5] <- 9
+    sten[z >= 2.5] <- 10
+    return(sten)
+  }
+
+  # Vectorized lookup for stanine
+  z_to_stanine <- function(z) {
+    stanine <- rep(NA_real_, length(z))
+    stanine[z < -1.75] <- 1
+    stanine[z >= -1.75 & z < -1.25] <- 2
+    stanine[z >= -1.25 & z < -0.75] <- 3
+    stanine[z >= -0.75 & z < -0.25] <- 4
+    stanine[z >= -0.25 & z < 0.25] <- 5
+    stanine[z >= 0.25 & z < 0.75] <- 6
+    stanine[z >= 0.75 & z < 1.25] <- 7
+    stanine[z >= 1.25 & z < 1.75] <- 8
+    stanine[z >= 1.75] <- 9
+    return(stanine)
+  }
+
+  # Convert input to z-scores
+  if (from == "percentile") {
+    if (any(score < 0 | score > 100, na.rm = TRUE)) stop("Percentile must be between 0 and 100.")
+    z_score <- qnorm(score / 100)
+  } else {
+    params <- score_params[[from]]
+    z_score <- (score - params["mean"]) / params["sd"]
+  }
+
+  # Convert z-scores to target scale
+  if (to == "percentile") {
+    converted_s <- pnorm(z_score) * 100
+  } else if (to == "sten") {
+    converted_s <- z_to_sten(z_score)
+    if (any(abs(z_score) > 4, na.rm = TRUE)) {
+      warning("Extreme z-score(s) detected; sten conversion may not be meaningful.")
     }
-
-    # Convert the z-score to the desired output score
-    if (to == "percentile") {
-      converted_s <- pnorm(z_score) * 100
-    } else {
-      params <- score_params[[to]]
-      converted_s <- params["mean"] + params["sd"] * z_score
-
-      # Apply rounding and clamping for sten and stanine scores
-      if (to == "sten") {
-        converted_s <- pmin(pmax(round(converted_s), 1), 10)
-      } else if (to == "stanine") {
-        converted_s <- pmin(pmax(round(converted_s), 1), 9)
-      }
+  } else if (to == "stanine") {
+    converted_s <- z_to_stanine(z_score)
+    if (any(abs(z_score) > 4, na.rm = TRUE)) {
+      warning("Extreme z-score(s) detected; stanine conversion may not be meaningful.")
     }
+  } else {
+    params <- score_params[[to]]
+    converted_s <- params["mean"] + params["sd"] * z_score
+  }
 
+  # Return scalar for scalar input
+  if (length(score) == 1) {
+    return(converted_s[1])
+  } else {
     return(converted_s)
-  })
-
-  return(converted_score)
+  }
 }
