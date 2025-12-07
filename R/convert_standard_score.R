@@ -14,6 +14,7 @@
 #' convert_standard_score(120, from = "iq", to = "stanine")
 #' convert_standard_score(75, from = "custom", to = "z_score", m = 80, sd = 5)
 
+
 convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
   from <- match.arg(from, choices = valid_types)
@@ -60,9 +61,11 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
       converted_s <- params["mean"] + params["sd"] * z_score
       # Apply rounding and clamping for sten and stanine scores
       if (to == "sten") {
-        converted_s <- pmin(pmax(round(converted_s), 1), 10)
+        converted_s <- round(converted_s)
+        converted_s <- pmin(pmax(converted_s, 1), 10)
       } else if (to == "stanine") {
-        converted_s <- pmin(pmax(round(converted_s), 1), 9)
+        converted_s <- round(converted_s)
+        converted_s <- pmin(pmax(converted_s, 1), 9)
       }
     }
     return(converted_s)
@@ -70,5 +73,4 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
 
   return(unname(converted_score))
 }
-
 
