@@ -19,6 +19,16 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
   from <- match.arg(from, choices = valid_types)
   to <- match.arg(to, choices = valid_types)
 
+  # Validate score
+  if (!is.numeric(score)) stop("`score` must be numeric.")
+
+  # Validate custom parameters
+  if (from == "custom" || to == "custom") {
+    if (is.null(m) || is.null(sd) || !is.numeric(m) || !is.numeric(sd) || sd <= 0) {
+      stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
+    }
+  }
+
   # Define the parameters for each score type
   score_params <- list(
     t_score = c(mean = 50, sd = 10),
@@ -27,22 +37,15 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
     sten = c(mean = 5.5, sd = 2),
     stanine = c(mean = 5, sd = 2),
     z_score = c(mean = 0, sd = 1),
-    percentile = NULL,  # Special case for percentiles
+    percentile = NULL,
     custom = c(mean = m, sd = sd)
   )
-
-  # Check if m and sd are provided when using custom
-  if (from == "custom" && (is.null(m) || is.null(sd))) {
-    stop("m and sd must be provided when `from` is 'custom'.")
-  }
-  if (to == "custom" && (is.null(m) || is.null(sd))) {
-    stop("m and sd must be provided when `to` is 'custom'.")
-  }
 
   # Vectorized conversion
   converted_score <- sapply(score, function(s) {
     # Convert the input score to a z-score
     if (from == "percentile") {
+      if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
       z_score <- qnorm(s / 100)
     } else {
       params <- score_params[[from]]
@@ -51,11 +54,10 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
 
     # Convert the z-score to the desired output score
     if (to == "percentile") {
-      converted_s <- pnorm(z_score) * 100
+      converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)  # Clamp to [0, 100]
     } else {
       params <- score_params[[to]]
       converted_s <- params["mean"] + params["sd"] * z_score
-
       # Apply rounding and clamping for sten and stanine scores
       if (to == "sten") {
         converted_s <- pmin(pmax(round(converted_s), 1), 10)
@@ -63,7 +65,6 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
         converted_s <- pmin(pmax(round(converted_s), 1), 9)
       }
     }
-
     return(converted_s)
   })
 
