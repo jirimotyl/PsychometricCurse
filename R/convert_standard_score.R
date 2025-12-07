@@ -23,10 +23,8 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
   if (!is.numeric(score)) stop("`score` must be numeric.")
 
   # Validate custom parameters
-  if (from == "custom" || to == "custom") {
-    if (is.null(m) || is.null(sd) || !is.numeric(m) || !is.numeric(sd) || sd <= 0) {
-      stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
-    }
+  if ((from == "custom" || to == "custom") && (is.null(m) || is.null(sd) || sd <= 0)) {
+    stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
   }
 
   # Define the parameters for each score type
@@ -47,6 +45,8 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
     if (from == "percentile") {
       if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
       z_score <- qnorm(s / 100)
+    } else if (from %in% c("sten", "stanine")) {
+      z_score <- (s - score_params[[from]]["mean"]) / score_params[[from]]["sd"]
     } else {
       params <- score_params[[from]]
       z_score <- (s - params["mean"]) / params["sd"]
@@ -54,7 +54,7 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
 
     # Convert the z-score to the desired output score
     if (to == "percentile") {
-      converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)  # Clamp to [0, 100]
+      converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
     } else {
       params <- score_params[[to]]
       converted_s <- params["mean"] + params["sd"] * z_score
@@ -68,5 +68,7 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
     return(converted_s)
   })
 
-  return(converted_score)
+  return(unname(converted_score))
 }
+
+
