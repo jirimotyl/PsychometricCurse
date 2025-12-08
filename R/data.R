@@ -1,7 +1,11 @@
+#' Package Data Objects
+#'
+#' This file contains shared data objects used across the package.
+#' @noRd
+
 #' Standard Score Parameters
 #'
 #' A named list of parameters (mean and sd) for common standard score types.
-#' @noRd
 score_params <- list(
   t_score   = c(mean = 50,  sd = 10),
   scaled    = c(mean = 10,  sd = 3),
@@ -12,3 +16,11 @@ score_params <- list(
   percentile= NULL,  # Special case
   custom    = NULL   # Placeholder for custom m/sd
 )
+
+# Add other shared data objects below as needed, e.g.:
+# 
+# #' Lookup table for X
+# #' @noRd
+# x_lookup <- list(...)
+
+NULL
