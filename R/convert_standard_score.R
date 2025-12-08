@@ -13,8 +13,6 @@
 #' convert_standard_score(65, from = "t_score", to = "iq")
 #' convert_standard_score(120, from = "iq", to = "stanine")
 #' convert_standard_score(75, from = "custom", to = "z_score", m = 80, sd = 5)
-
-
 convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
   from <- match.arg(from, choices = valid_types)
@@ -28,17 +26,9 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
     stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
   }
 
-  # Define the parameters for each score type
-  score_params <- list(
-    t_score = c(mean = 50, sd = 10),
-    scaled = c(mean = 10, sd = 3),
-    iq = c(mean = 100, sd = 15),
-    sten = c(mean = 5.5, sd = 2),
-    stanine = c(mean = 5, sd = 2),
-    z_score = c(mean = 0, sd = 1),
-    percentile = NULL,
-    custom = c(mean = m, sd = sd)
-  )
+  # Use the shared score_params
+  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
+  params$custom <- c(mean = m, sd = sd)
 
   # Vectorized conversion
   converted_score <- sapply(score, function(s) {
@@ -47,18 +37,16 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
       if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
       z_score <- qnorm(s / 100)
     } else if (from %in% c("sten", "stanine")) {
-      z_score <- (s - score_params[[from]]["mean"]) / score_params[[from]]["sd"]
+      z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
     } else {
-      params <- score_params[[from]]
-      z_score <- (s - params["mean"]) / params["sd"]
+      z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
     }
 
     # Convert the z-score to the desired output score
     if (to == "percentile") {
       converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
     } else {
-      params <- score_params[[to]]
-      converted_s <- params["mean"] + params["sd"] * z_score
+      converted_s <- params[[to]]["mean"] + params[[to]]["sd"] * z_score
       # Apply rounding and clamping for sten and stanine scores
       if (to == "sten") {
         converted_s <- round(converted_s)
@@ -73,4 +61,3 @@ convert_standard_score <- function(score, from, to, m = NULL, sd = NULL) {
 
   return(unname(converted_score))
 }
-
