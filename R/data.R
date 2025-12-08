@@ -16,11 +16,3 @@ score_params <- list(
   percentile= NULL,  # Special case
   custom    = NULL   # Placeholder for custom m/sd
 )
-
-# Add other shared data objects below as needed, e.g.:
-# 
-# #' Lookup table for X
-# #' @noRd
-# x_lookup <- list(...)
-
-NULL
