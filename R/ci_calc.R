@@ -3,8 +3,9 @@
 #' This function calculates and returns the lower and upper confidence interval around the provided total score.
 #'
 #' @param total_score A numeric value representing the total score for which the confidence interval is to be calculated.
-#' @param m A numeric value representing the normative mean score.
-#' @param sd A numeric value representing the standard deviation of the normative mean score.
+#' @param m A numeric value representing the normative mean score. Required if `score_type` is not provided.
+#' @param sd A numeric value representing the standard deviation of the normative mean score. Required if `score_type` is not provided.
+#' @param score_type A character string specifying the type of the score (e.g., "t_score", "iq", "sten"). If provided, `m` and `sd` are ignored.
 #' @param rel A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.
 #' @param rtm A logical value indicating whether to adjust for regression towards the mean (TRUE) or not (FALSE). Default is TRUE.
 #' @param ci A numeric value representing the confidence interval percentage. Default is 95.
@@ -12,19 +13,12 @@
 #' @export
 #' @examples
 #' ci_calc(total_score = 80, m = 70, sd = 10)
-#' ci_calc(total_score = 80, m = 70, sd = 10, rel = 0.9, rtm = FALSE, ci = 90)
-#' ci_calc(total_score = -1.25, m = 0, sd = 1)
-
-ci_calc <- function(total_score, m, sd, rel = 0.85, rtm = TRUE, ci = 95) {
+#' ci_calc(total_score = 80, score_type = "t_score", rel = 0.9, rtm = FALSE, ci = 90)
+#' ci_calc(total_score = -1.25, score_type = "z_score")
+ci_calc <- function(total_score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   # Validate inputs
   if (!is.numeric(total_score)) {
     stop("total_score must be numeric.")
-  }
-  if (!is.numeric(m)) {
-    stop("m must be numeric.")
-  }
-  if (!is.numeric(sd)) {
-    stop("sd must be numeric.")
   }
   if (!is.numeric(rel) || rel < 0 || rel > 1) {
     stop("rel must be numeric and between 0 and 1.")
@@ -34,6 +28,23 @@ ci_calc <- function(total_score, m, sd, rel = 0.85, rtm = TRUE, ci = 95) {
   }
   if (!is.numeric(ci) || ci < 0 || ci > 100) {
     stop("ci must be numeric and between 0 and 100.")
+  }
+
+  # Use score_params if score_type is provided
+  if (!is.null(score_type)) {
+    params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
+    if (is.null(params[[score_type]])) {
+      stop("Invalid score_type. See documentation for valid types.")
+    }
+    m <- params[[score_type]]["mean"]
+    sd <- params[[score_type]]["sd"]
+  } else {
+    if (!is.numeric(m)) {
+      stop("m must be numeric.")
+    }
+    if (!is.numeric(sd)) {
+      stop("sd must be numeric.")
+    }
   }
 
   # Calculate Standard Error of Measurement (SEM)
