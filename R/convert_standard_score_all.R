@@ -33,53 +33,45 @@ convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
 
   # Helper function to convert between two types
   convert <- function(s, from, to, m, sd) {
-    if (from == "percentile") {
-      if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
-      z_score <- qnorm(s / 100)
-    } else if (from %in% c("sten", "stanine")) {
-      z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
-    } else {
-      z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
-    }
-
-    if (to == "percentile") {
-      converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
-    } else {
-      converted_s <- params[[to]]["mean"] + params[[to]]["sd"] * z_score
-      if (to == "sten") {
-        converted_s <- round(converted_s)
-        converted_s <- pmin(pmax(converted_s, 1), 10)
-      } else if (to == "stanine") {
-        converted_s <- round(converted_s)
-        converted_s <- pmin(pmax(converted_s, 1), 9)
+    tryCatch({
+      if (from == "percentile") {
+        if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
+        z_score <- qnorm(s / 100)
+      } else if (from %in% c("sten", "stanine")) {
+        z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
+      } else {
+        z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
       }
-    }
-    return(converted_s)
+
+      if (to == "percentile") {
+        converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
+      } else {
+        converted_s <- params[[to]]["mean"] + params[[to]]["sd"] * z_score
+        if (to == "sten") {
+          converted_s <- round(converted_s)
+          converted_s <- pmin(pmax(converted_s, 1), 10)
+        } else if (to == "stanine") {
+          converted_s <- round(converted_s)
+          converted_s <- pmin(pmax(converted_s, 1), 9)
+        }
+      }
+      return(converted_s)
+    }, error = function(e) {
+      return(NA)
+    })
   }
 
   # Initialize a list to store results
-  results_list <- list()
-
-  # Fill in the original score
-  results_list[[from]] <- data.frame(
-    score_type = from,
-    value = score,
-    stringsAsFactors = FALSE
-  )
-
-  # Convert to all other types
-  for (to in valid_types) {
-    if (to == from) next  # Skip the original type
+  results_list <- lapply(valid_types, function(to) {
     if (to == "custom" && is.null(m) && is.null(sd)) {
-      next  # Skip custom if m and sd are not provided
+      return(data.frame(score_type = to, value = NA, stringsAsFactors = FALSE))
+    }
+    if (to == from) {
+      return(data.frame(score_type = to, value = score, stringsAsFactors = FALSE))
     }
     converted_score <- convert(score, from, to, m, sd)
-    results_list[[to]] <- data.frame(
-      score_type = to,
-      value = converted_score,
-      stringsAsFactors = FALSE
-    )
-  }
+    data.frame(score_type = to, value = converted_score, stringsAsFactors = FALSE)
+  })
 
   # Combine all results into a single tibble
   result_tibble <- do.call(rbind, results_list)
@@ -88,3 +80,5 @@ convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
+
+
