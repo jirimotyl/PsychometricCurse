@@ -20,7 +20,7 @@
 #' convert_standard_score_all_ci(120, from = "iq", rel = 0.9, ci = 90)
 #' convert_standard_score_all_ci(75, from = "custom", m = 80, sd = 5)
 #'
-ciconvert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
+convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
 
   # Validate score
