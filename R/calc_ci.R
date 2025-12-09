@@ -19,38 +19,24 @@
 #' calc_ci(score = 75, score_type = "percentile")
 calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   # Validate inputs
-  if (!is.numeric(score)) {
-    stop("score must be numeric.")
-  }
-  if (!is.numeric(rel) || rel < 0 || rel > 1) {
-    stop("rel must be numeric and between 0 and 1.")
-  }
-  if (!is.logical(rtm)) {
-    stop("rtm must be logical.")
-  }
-  if (!is.numeric(ci) || ci < 0 || ci > 100) {
-    stop("ci must be numeric and between 0 and 100.")
-  }
+  if (!is.numeric(score)) stop("score must be numeric.")
+  if (!is.numeric(rel) || rel < 0 || rel > 1) stop("rel must be numeric and between 0 and 1.")
+  if (!is.logical(rtm)) stop("rtm must be logical.")
+  if (!is.numeric(ci) || ci < 0 || ci > 100) stop("ci must be numeric and between 0 and 100.")
 
   # Handle percentile
   if (score_type == "percentile") {
-    if (score < 0 || score > 100) {
-      stop("Percentile must be between 0 and 100.")
-    }
-    # Convert percentile to z-score
+    if (score < 0 || score > 100) stop("Percentile must be between 0 and 100.")
     z_score <- qnorm(score / 100)
-    # Calculate CI for z-score
-    sem <- calculate_sem(sd = 1, rel = rel)
-    ci_sem <- calculate_ci_sem(sem = sem, ci = ci)
-    # Calculate true score
-    true_score <- calculate_true_score(score = z_score, m = 0, rel = rel)
-    # Determine the final interval based on rtm
+    sem_result <- calc_sem(sd = 1, rel = rel, ci = ci)
+    sem <- sem_result$sem
+    ci_sem <- sem_result$sem_ci
+    true_score <- calc_true_score(score = z_score, m = 0, rel = rel)
     if (rtm) {
       interval_final <- c(true_score - ci_sem, true_score + ci_sem)
     } else {
       interval_final <- c(z_score - ci_sem, z_score + ci_sem)
     }
-    # Convert back to percentile
     interval_final <- pnorm(interval_final) * 100
     return(interval_final)
   }
@@ -58,18 +44,14 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
   # Use score_params if score_type is provided
   if (!is.null(score_type)) {
     params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-    if (is.null(params[[score_type]])) {
-      stop("Invalid score_type. See documentation for valid types.")
+    if (is.null(params[[score_type]])) stop("Invalid score_type. See documentation for valid types.")
+    if (is.null(params[[score_type]]$mean) || is.null(params[[score_type]]$sd)) {
+      stop("score_type must have defined mean and sd in score_params.")
     }
     m <- params[[score_type]]["mean"]
     sd <- params[[score_type]]["sd"]
   } else {
-    if (!is.numeric(m)) {
-      stop("m must be numeric.")
-    }
-    if (!is.numeric(sd)) {
-      stop("sd must be numeric.")
-    }
+    if (is.null(m) || is.null(sd)) stop("m and sd must be provided if score_type is not specified.")
   }
 
   # Calculate SEM and CI for SEM
