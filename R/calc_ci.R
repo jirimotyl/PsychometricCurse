@@ -73,19 +73,20 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
   }
 
   # Calculate SEM and CI for SEM
-  sem <- calculate_sem(sd = sd, rel = rel)
-  ci_sem <- calculate_ci_sem(sem = sem, ci = ci)
-  # Calculate true score
-  true_score <- calculate_true_score(score = score, m = m, rel = rel)
-  # Calculate SEE and CI for SEE
-  see <- calculate_see(sd = sd, rel = rel)
-  ci_see <- calculate_ci_see(see = see, ci = ci)
+  sem_values <- calc_sem(sd = sd, rel = rel, ci = ci)
+  sem <- sem_values$sem
+  sem_ci <- sem_values$sem_ci
+
+  # Calculate true score estimate
+  true_score <- calc_true_score(score = score, m = m, rel = rel)
+
 
   # Determine the final interval based on rtm
   if (rtm) {
-    interval_final <- c(true_score - ci_sem, true_score + ci_sem)
+    interval_final <- c(true_score - sem_ci, true_score + sem_ci)
   } else {
-    interval_final <- c(score - ci_sem, score + ci_sem)
+    interval_final <- c(score - sem_ci, score + sem_ci)
   }
+
   return(interval_final)
 }

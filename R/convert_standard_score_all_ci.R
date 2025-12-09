@@ -68,7 +68,7 @@ ciconvert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, re
       next
     }
 
-    ci_result <- ci_calc(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
+    ci_result <- calc_ci(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
 
     results_list[[to]] <- data.frame(
       score_type = to,
