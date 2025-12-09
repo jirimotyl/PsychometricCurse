@@ -81,4 +81,3 @@ convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
   tibble::as_tibble(result_tibble)
 }
 
-

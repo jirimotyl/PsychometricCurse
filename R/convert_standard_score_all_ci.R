@@ -20,7 +20,7 @@
 #' convert_standard_score_all_ci(120, from = "iq", rel = 0.9, ci = 90)
 #' convert_standard_score_all_ci(75, from = "custom", m = 80, sd = 5)
 #'
-convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
+ciconvert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
 
   # Validate score
@@ -35,7 +35,7 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
   params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
   params$custom <- c(mean = m, sd = sd)
 
-  # Convert all scores
+  # Convert all scores (returns a tibble)
   converted <- convert_standard_score_all(score, from, m, sd)
 
   # Initialize a list to store results
@@ -54,7 +54,9 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
       next
     }
 
-    converted_score <- converted[[to]]
+    # Extract the value for the current score_type from the tibble
+    converted_score <- converted$value[converted$score_type == to]
+
     if (length(converted_score) == 0 || is.na(converted_score)) {
       results_list[[to]] <- data.frame(
         score_type = to,
@@ -67,6 +69,7 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
     }
 
     ci_result <- ci_calc(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
+
     results_list[[to]] <- data.frame(
       score_type = to,
       value = converted_score,
@@ -83,3 +86,4 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
+

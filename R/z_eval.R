@@ -3,7 +3,7 @@
 #' This function returns a text description of the given Z-score, indicating whether it is above average, below average, or within the average range.
 #'
 #' @param z A numeric value representing the Z-score to be evaluated.
-#' @param lang A character string specifying the language for the description. Currently supported languages are "en" (English) and "cs" (Czech). Default is "en".
+#' @param lang A character string specifying the language for the description. Currently supported languages are "en" (English), "cs" (Czech), and "de" (German). Default is "en".
 #' @return A character string providing a text interpretation of the given Z-score in the selected language.
 #' @export
 #' @examples
@@ -23,7 +23,8 @@ zscore_eval <- function(z, lang = "en") {
   # Define the labels for each language
   labels_lookup <- list(
     en = c("Extremely Below Average", "Below Average", "Lower Average", "Average", "Higher Average", "Above Average", "High Above Average"),
-    cs = c("extrémní podprůměr", "podprůměr", "nižší průměr", "průměr", "vyšší průměr", "nadprůměr", "vysoký nadprůměr")
+    cs = c("extrémní podprůměr", "podprůměr", "nižší průměr", "průměr", "vyšší průměr", "nadprůměr", "vysoký nadprůměr"),
+    de = c("Extrem unterdurchschnittlich", "Unterdurchschnittlich", "Leicht unterdurchschnittlich", "Durchschnittlich", "Leicht überdurchschnittlich", "Überdurchschnittlich", "Hoch überdurchschnittlich")
   )
 
   # Check if the specified language is supported
