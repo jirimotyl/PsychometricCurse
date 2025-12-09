@@ -9,7 +9,7 @@ zscore_eval(z, lang = "en")
 \arguments{
 \item{z}{A numeric value representing the Z-score to be evaluated.}
 
-\item{lang}{A character string specifying the language for the description. Currently supported languages are "en" (English) and "cs" (Czech). Default is "en".}
+\item{lang}{A character string specifying the language for the description. Currently supported languages are "en" (English), "cs" (Czech), and "de" (German). Default is "en".}
 }
 \value{
 A character string providing a text interpretation of the given Z-score in the selected language.
