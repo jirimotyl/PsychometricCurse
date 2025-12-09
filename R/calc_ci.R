@@ -45,7 +45,7 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
   if (!is.null(score_type)) {
     params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
     if (is.null(params[[score_type]])) stop("Invalid score_type. See documentation for valid types.")
-    if (is.null(params[[score_type]]$mean) || is.null(params[[score_type]]$sd)) {
+    if (is.null(params[[score_type]]["mean"]) || is.null(params[[score_type]]["sd"])) {
       stop("score_type must have defined mean and sd in score_params.")
     }
     m <- params[[score_type]]["mean"]
