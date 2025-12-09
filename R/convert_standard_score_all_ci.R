@@ -55,7 +55,7 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
     }
 
     converted_score <- converted[[to]]
-    if (is.na(converted_score)) {
+    if (length(converted_score) == 0 || is.na(converted_score)) {
       results_list[[to]] <- data.frame(
         score_type = to,
         value = NA,
@@ -83,8 +83,3 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
-
-
-
-
-
