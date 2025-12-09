@@ -25,32 +25,65 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
 
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
+
   # Validate custom parameters if needed
   if ((from == "custom") && (is.null(m) || is.null(sd) || sd <= 0)) {
     stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
   }
 
+  # Use the shared score_params
+  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
+  params$custom <- c(mean = m, sd = sd)
+
   # Convert all scores
-  converted_tibble <- convert_standard_score_all(score, from, m, sd)
+  converted <- convert_all_standard_scores(score, from, m, sd)
 
-  # Convert the tibble to a named list for easier access
-  converted <- setNames(converted_tibble$value, converted_tibble$score_type)
+  # Initialize a list to store results
+  results_list <- list()
 
-  # Calculate CIs for each score type
-  ci_results <- lapply(valid_types, function(to) {
+  # Calculate CIs for each score type and store in the list
+  for (to in valid_types) {
     if (to == "percentile" || (to == "custom" && is.null(m) && is.null(sd))) {
-      return(NA)
+      results_list[[to]] <- data.frame(
+        score_type = to,
+        value = NA,
+        ci_lower = NA,
+        ci_upper = NA,
+        stringsAsFactors = FALSE
+      )
+      next
     }
-    converted_score <- converted[[to]]
-    if (is.null(converted_score) || length(converted_score) == 0 || is.na(converted_score)) return(NA)
-    ci_calc(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
-  })
-  names(ci_results) <- paste0(valid_types, "_ci")
 
-  # Combine into a single tibble
-  result <- cbind(converted_tibble, do.call(cbind, lapply(ci_results, as.numeric)))
-  rownames(result) <- NULL
-  result
+    converted_score <- converted[[to]]
+    if (is.na(converted_score)) {
+      results_list[[to]] <- data.frame(
+        score_type = to,
+        value = NA,
+        ci_lower = NA,
+        ci_upper = NA,
+        stringsAsFactors = FALSE
+      )
+      next
+    }
+
+    ci_result <- ci_calc(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
+    results_list[[to]] <- data.frame(
+      score_type = to,
+      value = converted_score,
+      ci_lower = ci_result[1],
+      ci_upper = ci_result[2],
+      stringsAsFactors = FALSE
+    )
+  }
+
+  # Combine all results into a single tibble
+  result_tibble <- do.call(rbind, results_list)
+  rownames(result_tibble) <- NULL
+
+  # Return the result as a tibble
+  tibble::as_tibble(result_tibble)
 }
+
+
 
 
