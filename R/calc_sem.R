@@ -9,6 +9,7 @@
 #' @return A named list containing:
 #'         - `sem`: Standard Error of Measurement
 #'         - `ci_sem`: Confidence interval for SEM
+#' @export
 #' @examples
 #' # Example with standard deviation and reliability
 #' calc_sem(sd = 10, rel = 0.9, ci = 80)

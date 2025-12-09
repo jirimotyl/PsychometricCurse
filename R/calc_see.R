@@ -9,6 +9,7 @@
 #' @return A named list containing:
 #'         - `see`: Standard Error of Estimate
 #'         - `see_ci`: Confidence interval for SEE
+#' @export
 #' @examples
 #' # Example with standard deviation and reliability
 #' calc_see(sd = 10, rel = 0.85, ci = 95)

@@ -8,6 +8,7 @@
 #' @param m Normative mean score.
 #' @param rel Reliability of the measurement (must be between 0 and 1; default is 0.85).
 #' @return A numeric value representing the true score estimate.
+#' @export
 #' @examples
 #' # Example with observed score, normative mean, and reliability
 #' calculate_true_score(score = 80, m = 70, rel = 0.85)
