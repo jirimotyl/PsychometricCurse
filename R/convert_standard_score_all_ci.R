@@ -36,7 +36,7 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
   params$custom <- c(mean = m, sd = sd)
 
   # Convert all scores
-  converted <- convert_all_standard_scores(score, from, m, sd)
+  converted <- convert_standard_score_all(score, from, m, sd)
 
   # Initialize a list to store results
   results_list <- list()
@@ -83,6 +83,7 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
+
 
 
 
