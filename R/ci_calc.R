@@ -2,7 +2,7 @@
 #'
 #' This function calculates and returns the lower and upper confidence interval around the provided total score.
 #'
-#' @param total_score A numeric value representing the total score for which the confidence interval is to be calculated.
+#' @param score A numeric value representing the total score for which the confidence interval is to be calculated.
 #' @param m A numeric value representing the normative mean score. Required if `score_type` is not provided.
 #' @param sd A numeric value representing the standard deviation of the normative mean score. Required if `score_type` is not provided.
 #' @param score_type A character string specifying the type of the score (e.g., "t_score", "iq", "sten"). If provided, `m` and `sd` are ignored.
@@ -12,13 +12,13 @@
 #' @return A numeric vector containing the lower and upper confidence interval values for the provided total score.
 #' @export
 #' @examples
-#' ci_calc(total_score = 80, m = 70, sd = 10)
-#' ci_calc(total_score = 80, score_type = "t_score", rel = 0.9, rtm = FALSE, ci = 90)
-#' ci_calc(total_score = -1.25, score_type = "z_score")
-ci_calc <- function(total_score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
+#' ci_calc(score = 80, m = 70, sd = 10)
+#' ci_calc(score = 80, score_type = "t_score", rel = 0.9, rtm = FALSE, ci = 90)
+#' ci_calc(score = -1.25, score_type = "z_score")
+ci_calc <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   # Validate inputs
-  if (!is.numeric(total_score)) {
-    stop("total_score must be numeric.")
+  if (!is.numeric(score)) {
+    stop("score must be numeric.")
   }
   if (!is.numeric(rel) || rel < 0 || rel > 1) {
     stop("rel must be numeric and between 0 and 1.")
@@ -54,7 +54,7 @@ ci_calc <- function(total_score, m = NULL, sd = NULL, score_type = NULL, rel = 0
   ci_sem <- abs(qnorm((100 - ci) / 200)) * sem
 
   # Calculate true score
-  true_score <- rel * total_score + (1 - rel) * m
+  true_score <- rel * score + (1 - rel) * m
 
   # Calculate Standard Error of Estimate (SEE)
   see <- sd * sqrt(rel * (1 - rel))
@@ -66,7 +66,7 @@ ci_calc <- function(total_score, m = NULL, sd = NULL, score_type = NULL, rel = 0
   if (rtm) {
     interval_final <- c(true_score - ci_sem, true_score + ci_sem)
   } else {
-    interval_final <- c(total_score - ci_sem, total_score + ci_sem)
+    interval_final <- c(score - ci_sem, score + ci_sem)
   }
 
   return(interval_final)
