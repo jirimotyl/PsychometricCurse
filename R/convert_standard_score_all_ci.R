@@ -30,27 +30,27 @@ convert_standard_score_all_ci <- function(score, from, m = NULL, sd = NULL, rel 
     stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
   }
 
-  # Use the shared score_params
-  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-  params$custom <- c(mean = m, sd = sd)
-
   # Convert all scores
-  converted <- convert_standard_score_all(score, from, m, sd)
+  converted_tibble <- convert_standard_score_all(score, from, m, sd)
+
+  # Convert the tibble to a named list for easier access
+  converted <- setNames(converted_tibble$value, converted_tibble$score_type)
 
   # Calculate CIs for each score type
   ci_results <- lapply(valid_types, function(to) {
-    if (to == "percentile" || to == "custom" && is.null(m) && is.null(sd)) {
+    if (to == "percentile" || (to == "custom" && is.null(m) && is.null(sd))) {
       return(NA)
     }
     converted_score <- converted[[to]]
-    if (is.na(converted_score)) return(NA)
+    if (is.null(converted_score) || length(converted_score) == 0 || is.na(converted_score)) return(NA)
     ci_calc(converted_score, score_type = to, rel = rel, rtm = rtm, ci = ci)
   })
   names(ci_results) <- paste0(valid_types, "_ci")
 
   # Combine into a single tibble
-  result <- cbind(converted, do.call(cbind, lapply(ci_results, as.numeric)))
-  rownames(result) <- "type"
-  tibble::as_tibble(t(result), rownames = "type")
+  result <- cbind(converted_tibble, do.call(cbind, lapply(ci_results, as.numeric)))
+  rownames(result) <- NULL
+  result
 }
+
 
