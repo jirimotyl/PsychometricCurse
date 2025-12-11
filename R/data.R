@@ -1,11 +1,12 @@
 #' Package Data Objects
 #'
 #' This file contains shared data objects used across the package.
-#' @noRd
+"data_objects"
 
 #' Standard Score Parameters
 #'
 #' A named list of parameters (mean and sd) for common standard score types.
+#' @noRd
 score_params <- list(
   z_score   = c(mean = 0,   sd = 1),
   t_score   = c(mean = 50,  sd = 10),
@@ -16,3 +17,9 @@ score_params <- list(
   percentile= NULL,  # Special case
   custom    = NULL   # Placeholder for custom m/sd
 )
+
+#' Valid Score Types
+#'
+#' A character vector of valid score types used in the package.
+#' @noRd
+valid_types <- c("z_score", "t_score", "scaled", "iq", "sten", "stanine", "percentile", "custom")
