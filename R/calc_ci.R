@@ -24,6 +24,25 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
   if (!is.logical(rtm)) stop("rtm must be logical.")
   if (!is.numeric(ci) || ci < 0 || ci > 100) stop("ci must be numeric and between 0 and 100.")
 
+  # Check that either score_type is provided, or both m and sd are provided
+  if (is.null(score_type)) {
+    if (is.null(m) || is.null(sd)) {
+      stop("If score_type is not provided, both m and sd must be provided.")
+    }
+    if (!is.numeric(m) || !is.numeric(sd)) {
+      stop("m and sd must be numeric.")
+    }
+  } else {
+    # If score_type is provided, check if it is valid
+    params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
+    if (is.null(params[[score_type]])) {
+      stop("Invalid score_type. See documentation for valid types.")
+    }
+    if (is.null(params[[score_type]]["mean"]) || is.null(params[[score_type]]["sd"])) {
+      stop("score_type must have defined mean and sd in score_params.")
+    }
+  }
+
   # Handle percentile
   if (score_type == "percentile") {
     if (score < 0 || score > 100) stop("Percentile must be between 0 and 100.")
@@ -70,5 +89,6 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
     interval_final <- c(score - sem_ci, score + sem_ci)
   }
 
+  names(interval_final) <- c("lower", "upper")
   return(interval_final)
 }
