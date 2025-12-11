@@ -8,5 +8,6 @@ The data in the `data/` directory of this repository is provided under the follo
 4. **No commercial use**: You may not use this data for commercial purposes.
 5. **Non-commercial restriction**: This data is licensed only for use within this project and may not be extracted, repurposed, or used in any other context.
 6. **Qualified Use**: Any interpretation, analysis, or application of this data must be performed by, or under the direct supervision of, a **licensed psychologist or a professional skilled in psychometrics**. Unqualified use or interpretation of this data is strictly prohibited.
+7. **Limited Liability and Warranty**: The data is provided "as is", without warranty of any kind, express or implied. The authors and contributors shall not be held liable for any errors, omissions, or inaccuracies in the data, nor for any interpretations, analyses, or applications derived from the data. In no event shall the authors or contributors be liable for any claim, damages, or other liability arising from, out of, or in connection with the data or its use.
 
 For permission to use this data outside of **PsychometricCurse**, please contact **jiri.motyl@vfn.cz** or the original authors of the datasets, as mentioned in the documentation of this project.
