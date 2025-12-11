@@ -21,10 +21,10 @@ convert_standard_score_all_ci(
 "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
 \item{m}{Optional numeric value specifying the mean for a custom distribution.
-Required if `score_type` is "custom" or if "custom" should be included in the output.}
+Required if `score_type` is "custom" or if "custom" is included in the output.}
 
 \item{sd}{Optional numeric value specifying the standard deviation for a custom distribution.
-Required if `score_type` is "custom" or if "custom" should be included in the output.}
+Required if `score_type` is "custom" or if "custom" is included in the output.}
 
 \item{rel}{A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.}
 
