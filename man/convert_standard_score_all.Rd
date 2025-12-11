@@ -4,19 +4,19 @@
 \alias{convert_standard_score_all}
 \title{Convert a Standard Score to All Possible Standard Score Types}
 \usage{
-convert_standard_score_all(score, from, m = NULL, sd = NULL)
+convert_standard_score_all(score, score_type, m = NULL, sd = NULL)
 }
 \arguments{
 \item{score}{A numeric value representing the score to convert.}
 
-\item{from}{A character string specifying the type of the input score. Must be one of
+\item{score_type}{A character string specifying the type of the input score. Must be one of
 "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
 \item{m}{Optional numeric value specifying the mean for a custom distribution.
-Required if `from` or any `to` is "custom".}
+Required if `score_type` is "custom" or if "custom" should be included in the output.}
 
 \item{sd}{Optional numeric value specifying the standard deviation for a custom distribution.
-Required if `from` or any `to` is "custom".}
+Required if `score_type` is "custom" or if "custom" should be included in the output.}
 }
 \value{
 A tibble with columns `score_type` and `value`, including the original score.
@@ -26,7 +26,7 @@ Converts a given score from one standard type to all supported standard score ty
 returning a tibble with columns for score_type and value.
 }
 \examples{
-convert_standard_score_all(65, from = "t_score")
-convert_standard_score_all(120, from = "iq")
-convert_standard_score_all(75, from = "custom", m = 80, sd = 5)
+convert_standard_score_all(65, score_type = "t_score")
+convert_standard_score_all(120, score_type = "iq")
+convert_standard_score_all(75, score_type = "t_score", m = 80, sd = 5)
 }

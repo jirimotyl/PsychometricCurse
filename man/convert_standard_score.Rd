@@ -4,18 +4,18 @@
 \alias{convert_standard_score}
 \title{Convert Between Different Standard Score Types}
 \usage{
-convert_standard_score(score, from, to, m = NULL, sd = NULL)
+convert_standard_score(score, score_type, target_type, m = NULL, sd = NULL)
 }
 \arguments{
 \item{score}{A numeric value representing the score to convert.}
 
-\item{from}{A character string specifying the type of the input score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
+\item{score_type}{A character string specifying the type of the input score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
-\item{to}{A character string specifying the type of the output score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
+\item{target_type}{A character string specifying the type of the output score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
-\item{m}{Optional numeric value specifying the mean for a custom distribution. Required if `from` or `to` is "custom".}
+\item{m}{Optional numeric value specifying the mean for a custom distribution. Required if `score_type` or `target_type` is "custom".}
 
-\item{sd}{Optional numeric value specifying the standard deviation for a custom distribution. Required if `from` or `to` is "custom".}
+\item{sd}{Optional numeric value specifying the standard deviation for a custom distribution. Required if `score_type` or `target_type` is "custom".}
 }
 \value{
 A numeric value representing the converted score.
@@ -24,7 +24,7 @@ A numeric value representing the converted score.
 Converts a score from one standard type to another. Supported score types include t_score, scaled, iq, sten, stanine, z_score, percentile, and custom distributions defined by mean (m) and standard deviation (sd).
 }
 \examples{
-convert_standard_score(65, from = "t_score", to = "iq")
-convert_standard_score(120, from = "iq", to = "stanine")
-convert_standard_score(75, from = "custom", to = "z_score", m = 80, sd = 5)
+convert_standard_score(65, score_type = "t_score", target_type = "iq")
+convert_standard_score(120, score_type = "iq", target_type = "stanine")
+convert_standard_score(75, score_type = "custom", target_type = "z_score", m = 80, sd = 5)
 }
