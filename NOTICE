@@ -1,0 +1,8 @@
+# Important Notice Regarding Licensing
+
+This repository contains both **code** and **data**, each subject to different licensing terms:
+
+- **Code**: Licensed under GNU GPL 3.0. See [LICENSE](LICENSE).
+- **Data**: Subject to a **custom restrictive license**. See [DATA_LICENSE.md](DATA_LICENSE.md).
+
+By using this repository, you agree to comply with both licenses.
