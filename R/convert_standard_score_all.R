@@ -4,33 +4,29 @@
 #' returning a tibble with columns for score_type and value.
 #'
 #' @param score A numeric value representing the score to convert.
-#' @param from A character string specifying the type of the input score. Must be one of
+#' @param score_type A character string specifying the type of the input score. Must be one of
 #'        "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
 #' @param m Optional numeric value specifying the mean for a custom distribution.
-#'        Required if `from` or any `to` is "custom".
+#'        Required if `score_type` is "custom" or if "custom" should be included in the output.
 #' @param sd Optional numeric value specifying the standard deviation for a custom distribution.
-#'        Required if `from` or any `to` is "custom".
+#'        Required if `score_type` is "custom" or if "custom" should be included in the output.
 #' @return A tibble with columns `score_type` and `value`, including the original score.
 #' @export
 #' @examples
-#' convert_standard_score_all(65, from = "t_score")
-#' convert_standard_score_all(120, from = "iq")
-#' convert_standard_score_all(75, from = "custom", m = 80, sd = 5)
-convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
+#' convert_standard_score_all(65, score_type = "t_score")
+#' convert_standard_score_all(120, score_type = "iq")
+#' convert_standard_score_all(75, score_type = "t_score", m = 80, sd = 5)
+convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
   valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
-
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
-
   # Validate custom parameters if needed
-  if ((from == "custom") && (is.null(m) || is.null(sd) || sd <= 0)) {
-    stop("`m` and `sd` must be provided and valid (sd > 0) when using 'custom'.")
+  if (score_type == "custom" && (is.null(m) || is.null(sd) || sd <= 0)) {
+    stop("`m` and `sd` must be provided and valid (sd > 0) when `score_type` is 'custom'.")
   }
-
   # Use the shared score_params
   params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
   params$custom <- c(mean = m, sd = sd)
-
   # Helper function to convert between two types
   convert <- function(s, from, to, m, sd) {
     tryCatch({
@@ -42,7 +38,6 @@ convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
       } else {
         z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
       }
-
       if (to == "percentile") {
         converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
       } else {
@@ -60,24 +55,20 @@ convert_standard_score_all <- function(score, from, m = NULL, sd = NULL) {
       return(NA)
     })
   }
-
   # Initialize a list to store results
   results_list <- lapply(valid_types, function(to) {
-    if (to == "custom" && is.null(m) && is.null(sd)) {
+    if (to == "custom" && (is.null(m) || is.null(sd))) {
       return(data.frame(score_type = to, value = NA, stringsAsFactors = FALSE))
     }
-    if (to == from) {
+    if (to == score_type) {
       return(data.frame(score_type = to, value = score, stringsAsFactors = FALSE))
     }
-    converted_score <- convert(score, from, to, m, sd)
+    converted_score <- convert(score, score_type, to, m, sd)
     data.frame(score_type = to, value = converted_score, stringsAsFactors = FALSE)
   })
-
   # Combine all results into a single tibble
   result_tibble <- do.call(rbind, results_list)
   rownames(result_tibble) <- NULL
-
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
-
