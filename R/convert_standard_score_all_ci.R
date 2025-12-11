@@ -7,9 +7,9 @@
 #' @param score_type A character string specifying the type of the input score. Must be one of
 #'        "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
 #' @param m Optional numeric value specifying the mean for a custom distribution.
-#'        Required if `score_type` is "custom" or if "custom" should be included in the output.
+#'        Required if `score_type` is "custom" or if "custom" is included in the output.
 #' @param sd Optional numeric value specifying the standard deviation for a custom distribution.
-#'        Required if `score_type` is "custom" or if "custom" should be included in the output.
+#'        Required if `score_type` is "custom" or if "custom" is included in the output.
 #' @param rel A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.
 #' @param rtm A logical value indicating whether to adjust for regression towards the mean (TRUE) or not (FALSE). Default is TRUE.
 #' @param ci A numeric value representing the confidence interval percentage. Default is 95.
