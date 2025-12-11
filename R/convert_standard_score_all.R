@@ -17,7 +17,6 @@
 #' convert_standard_score_all(120, score_type = "iq")
 #' convert_standard_score_all(75, score_type = "t_score", m = 80, sd = 5)
 convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
-  valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
   # Validate custom parameters if needed
@@ -56,7 +55,7 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
     })
   }
   # Initialize a list to store results
-  results_list <- lapply(valid_types, function(to) {
+  results_list <- lapply(score_valid_types, function(to) {
     if (to == "custom" && (is.null(m) || is.null(sd))) {
       return(data.frame(score_type = to, value = NA, stringsAsFactors = FALSE))
     }

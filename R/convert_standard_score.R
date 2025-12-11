@@ -14,9 +14,8 @@
 #' convert_standard_score(120, score_type = "iq", target_type = "stanine")
 #' convert_standard_score(75, score_type = "custom", target_type = "z_score", m = 80, sd = 5)
 convert_standard_score <- function(score, score_type, target_type, m = NULL, sd = NULL) {
-  valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
-  score_type <- match.arg(score_type, choices = valid_types)
-  target_type <- match.arg(target_type, choices = valid_types)
+  score_type <- match.arg(score_type, choices = score_valid_types)
+  target_type <- match.arg(target_type, choices = score_valid_types)
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
   # Validate custom parameters

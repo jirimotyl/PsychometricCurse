@@ -1,7 +1,6 @@
 #' Package Data Objects
 #'
 #' This file contains shared data objects used across the package.
-"data_objects"
 
 #' Standard Score Parameters
 #'

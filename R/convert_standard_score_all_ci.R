@@ -20,7 +20,6 @@
 #' convert_standard_score_all_ci(120, score_type = "iq", rel = 0.9, ci = 90)
 #' convert_standard_score_all_ci(75, score_type = "custom", m = 80, sd = 5)
 convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
-  valid_types <- c("t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", "custom")
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
   # Validate custom parameters if needed
@@ -35,7 +34,7 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
   # Initialize a list to store results
   results_list <- list()
   # Calculate CIs for each score type and store in the list
-  for (current_type in valid_types) {
+  for (current_type in score_valid_types) {
     if (current_type == "custom" && (is.null(m) || is.null(sd))) {
       results_list[[current_type]] <- data.frame(
         score_type = current_type,

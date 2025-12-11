@@ -10,31 +10,19 @@
 #' zscore_eval(-1.52)
 #' zscore_eval(1.23, lang = "en")
 #' zscore_eval(0.1, lang = "cs")
-
 zscore_eval <- function(z, lang = "en") {
   # Check if z is NA
   if (is.na(z)) {
     return(NA)
   }
-
+  # Check if the specified language is supported
+  if (!(lang %in% lang_supported)) {
+    stop("Unsupported language. Supported languages are: ", toString(lang_supported))
+  }
   # Define the breaks for Z-score categories
   breaks <- c(-Inf, -2, -1.2, -0.8, 0.8, 1.2, 2, Inf)
-
-  # Define the labels for each language
-  labels_lookup <- list(
-    en = c("Extremely Below Average", "Below Average", "Lower Average", "Average", "Higher Average", "Above Average", "High Above Average"),
-    cs = c("extrémní podprůměr", "podprůměr", "nižší průměr", "průměr", "vyšší průměr", "nadprůměr", "vysoký nadprůměr"),
-    de = c("Extrem unterdurchschnittlich", "Unterdurchschnittlich", "Leicht unterdurchschnittlich", "Durchschnittlich", "Leicht überdurchschnittlich", "Überdurchschnittlich", "Hoch überdurchschnittlich")
-  )
-
-  # Check if the specified language is supported
-  if (!(lang %in% names(labels_lookup))) {
-    stop("Unsupported language. Supported languages are: ", toString(names(labels_lookup)))
-  }
-
   # Get the labels for the specified language
-  labels <- labels_lookup[[lang]]
-
+  labels <- zscore_labels[[lang]]
   # Return the description based on the Z-score
   cut(z, breaks = breaks, labels = labels, right = FALSE)
 }
