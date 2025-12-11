@@ -36,7 +36,7 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
   results_list <- list()
   # Calculate CIs for each score type and store in the list
   for (current_type in valid_types) {
-    if (current_type == "percentile" || (current_type == "custom" && (is.null(m) || is.null(sd)))) {
+    if (current_type == "custom" && (is.null(m) || is.null(sd))) {
       results_list[[current_type]] <- data.frame(
         score_type = current_type,
         value = NA,
@@ -58,7 +58,12 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
       )
       next
     }
-    ci_result <- calc_ci(converted_score, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
+    # Calculate CI for custom type
+    if (current_type == "custom") {
+      ci_result <- calc_ci(converted_score, m = m, sd = sd, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
+    } else {
+      ci_result <- calc_ci(converted_score, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
+    }
     results_list[[current_type]] <- data.frame(
       score_type = current_type,
       value = converted_score,
