@@ -1,3 +1,25 @@
+#' Calculation of Confidence Interval (CI)
+#'
+#' This function calculates and returns the lower and upper confidence interval around the provided score.
+#' For percentiles, it converts to z-score, calculates the CI, and converts back to percentiles.
+#' For other score types, it uses the provided or predefined mean and standard deviation.
+#'
+#' @param score A numeric value representing the score for which the confidence interval is to be calculated.
+#' @param m A numeric value representing the normative mean score. Required if `score_type` is NULL or "custom".
+#' @param sd A numeric value representing the standard deviation of the normative mean score. Required if `score_type` is NULL or "custom".
+#' @param score_type A character string specifying the type of the score (e.g., "z_score", "t_score", "scaled", "iq", "sten", "percentile", "custom").
+#'        If provided as a valid type (except "custom"), `m` and `sd` are ignored and fetched from `score_params`.
+#' @param rel A numeric value between 0 and 1 representing the reliability of the measurement. Default is 0.85.
+#' @param rtm A logical value indicating whether to adjust for regression towards the mean (TRUE) or not (FALSE). Default is TRUE.
+#' @param ci A numeric value representing the confidence interval percentage. Default is 95.
+#' @return A named numeric vector containing the lower and upper confidence interval values for the provided score.
+#' @export
+#' @examples
+#' calc_ci(score = 80, m = 70, sd = 10)
+#' calc_ci(score = 65, score_type = "t_score", rel = 0.9, rtm = FALSE, ci = 90)
+#' calc_ci(score = -1.25, score_type = "z_score")
+#' calc_ci(score = 75, score_type = "percentile")
+#' calc_ci(score = 80, score_type = "custom", m = 70, sd = 8)
 calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   # Validate inputs
   if (!is.numeric(score)) stop("score must be numeric.")

@@ -1,8 +1,9 @@
 #' Calculate True Score Estimate
 #'
 #' This function calculates the true score estimate using the observed score,
-#' reliability of the measurement, and the normative mean. The estimate is based on the assumption of the regression towards the mean.
-#' The true score is estimated using the formula: true_score = rel x score + (1 - rel) x m.
+#' the reliability of the measurement, and the normative mean. The estimate is based on
+#' regression toward the mean and uses the formula:
+#' \code{true_score = rel * score + (1 - rel) * m} (Formula 7.2.3, Lord and Novick, 1968).
 #'
 #' @param score Observed score.
 #' @param m Normative mean score.
@@ -14,6 +15,7 @@
 #' calculate_true_score(score = 80, m = 70, rel = 0.85)
 #' # Example with z-score (m = 0)
 #' calculate_true_score(score = 0.8, m = 0, rel = 0.85)
+
 calc_true_score <- function(score, m, rel = 0.85) {
   # Validate inputs
   if (!is.numeric(score)) {

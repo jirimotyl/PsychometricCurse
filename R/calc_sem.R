@@ -8,7 +8,7 @@
 #' @param ci Confidence interval percentage (default is 95).
 #' @return A named list containing:
 #'         - `sem`: Standard Error of Measurement
-#'         - `ci_sem`: Confidence interval for SEM
+#'         - `sem_ci`: Confidence interval for SEM
 #' @export
 #' @examples
 #' # Example with standard deviation and reliability

@@ -39,3 +39,21 @@ zscore_labels <- list(
     "Hoch überdurchschnittlich"
   )
 )
+
+rci_labels <- list(
+  en = c(
+    "Significant improvement",
+    "Change not confirmed",
+    "Significant decline"
+  ),
+  cs = c(
+    "Signifikantní zlepšení",
+    "Změna nepotvrzena",
+    "Signifikantní pokles"
+  ),
+  de = c(
+    "Signifikante Verbesserung",
+    "Veränderung nicht bestätigt",
+    "Signifikante Verschlechterung"
+  )
+)
