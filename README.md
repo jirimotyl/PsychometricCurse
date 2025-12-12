@@ -1,5 +1,33 @@
 # PsychometricCurse
 
+## Why is it called a "curse"?
+
+Wikipedia defines a **curse** as:
+> *Any expressed wish that some form of adversity or misfortune will befall or attach to one or more persons, a place, or an object. In many belief systems, the curse itself—or the ritual accompanying it—is thought to have causative power. Reversing a curse often requires elaborate rituals or prayers, as if the words alone can shape reality.*
+
+In the world of psychological assessment, the term "curse" takes on a metaphorical meaning, one that reflects the profound and sometimes irreversible impact of diagnostic labels and test interpretations. As Efran, Lukens, and Lukens (1990, p. 89) wrote:
+> "We were on the phone with a gentleman who wanted to know if we treated 'borderlines'—his wife was one, and they both had problems. We tried to indicate that we didn’t treat borderlines, we treated people, some of whom might have been given that label."
+
+This package is named **PsychometricCurse** to serve as a permanent reminder: **Diagnoses, like curses, can stick.** They shape how people see themselves and how others see them, often long after the assessment is over. The power to apply such labels is not to be taken lightly.
+
+### What This Package Offers
+This package provides tools that are still underused in everyday practice, including:
+- Automatic calculation of confidence intervals around scores,
+- Accounting for reliability of methods,
+- Interpretation of measurement error,
+- More precise evaluation of performance changes over time.
+
+The goal is to promote **replicable, evidence-based clinical reasoning**, to help clinicians move beyond intuition and toward data-informed decisions.
+
+### A Word of Caution
+Yet, numbers are not sacred or infallible. Performance fluctuates naturally, and even healthy individuals may produce below-average results. Clinicians must avoid two pitfalls:
+- Overpathologizing minor deviations, and
+- Dismissing genuine but subtle struggles.
+
+As the quote above reminds us, **we don’t treat labels; we treat people.** Use this package as both a tool and a warning: interpret with care, question rigorously, and always remember the human behind the data.
+
+---
+
 ## Licensing
 
 ### Code
@@ -7,7 +35,6 @@ The code in this repository is licensed under the **GNU GPL 3.0**. See [LICENSE]
 
 ### Data
 The data in the `data/` directory is **not** covered by the GNU GPL 3.0. Instead, it is subject to a **custom restrictive license**. See [DATA_LICENSE.md](DATA_LICENSE.md) for details.
-
 - You may use the data **only within this project**. 
 - You may **not** redistribute or reuse the data in other projects.
 - You may **not** use the data for commercial purposes.
