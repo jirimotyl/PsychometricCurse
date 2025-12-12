@@ -16,7 +16,7 @@ calc_sem(sd, rel = 0.85, ci = 95)
 \value{
 A named list containing:
         - `sem`: Standard Error of Measurement
-        - `ci_sem`: Confidence interval for SEM
+        - `sem_ci`: Confidence interval for SEM
 }
 \description{
 This function calculates the Standard Error of Measurement (SEM) and its confidence interval.

@@ -20,7 +20,7 @@ A named list containing:
 }
 \description{
 This function calculates the Standard Error of Estimate (SEE) and its confidence interval.
-It is designed for psychometric calculations involving reliability and standard deviation.
+For details on the true score estimate, see \code{\link{calc_true_score}}.
 }
 \examples{
 # Example with standard deviation and reliability

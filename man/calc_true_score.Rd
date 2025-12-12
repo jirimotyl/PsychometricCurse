@@ -18,8 +18,9 @@ A numeric value representing the true score estimate.
 }
 \description{
 This function calculates the true score estimate using the observed score,
-reliability of the measurement, and the normative mean. The estimate is based on the assumption of the regression towards the mean.
-The true score is estimated using the formula: true_score = rel x score + (1 - rel) x m.
+the reliability of the measurement, and the normative mean. The estimate is based on
+regression toward the mean and uses the formula:
+\code{true_score = rel * score + (1 - rel) * m} (Formula 7.2.3, Lord and Novick, 1968).
 }
 \examples{
 # Example with observed score, normative mean, and reliability
