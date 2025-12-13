@@ -110,19 +110,19 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
   # Determine evaluation result
   if (time) {
     if (tested_change < -rci_size) {
-      eval <- labels[1]
+      eval <- labels[3]
     } else if (tested_change <= rci_size & tested_change >= -rci_size) {
       eval <- labels[2]
     } else {
-      eval <- labels[3]
+      eval <- labels[1]
     }
   } else {
     if (tested_change > rci_size) {
-      eval <- labels[1]
+      eval <- labels[3]
     } else if (tested_change <= rci_size & tested_change >= -rci_size) {
       eval <- labels[2]
     } else {
-      eval <- labels[3]
+      eval <- labels[1]
     }
   }
 
