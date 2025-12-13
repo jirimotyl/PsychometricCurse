@@ -38,15 +38,15 @@ convert_standard_score <- function(score, score_type, target_type, m = NULL, sd 
       if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
       z_score <- qnorm(s / 100)
     } else if (score_type %in% c("sten", "stanine")) {
-      z_score <- (s - params[[score_type]]["m"]) / params[[score_type]]["sd"]
+      z_score <- (s - params[[score_type]]$m) / params[[score_type]]$sd
     } else {
-      z_score <- (s - params[[score_type]]["m"]) / params[[score_type]]["sd"]
+      z_score <- (s - params[[score_type]]$m) / params[[score_type]]$sd
     }
     # Convert the z-score to the desired output score
     if (target_type == "percentile") {
       converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
     } else {
-      converted_s <- params[[target_type]]["m"] + params[[target_type]]["sd"] * z_score
+      converted_s <- params[[target_type]]$m + params[[target_type]]$sd * z_score
       # Apply rounding and clamping for sten and stanine scores
       if (target_type == "sten") {
         converted_s <- round(converted_s)

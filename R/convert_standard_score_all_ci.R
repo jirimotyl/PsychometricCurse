@@ -26,54 +26,49 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
   if (score_type == "custom" && (is.null(m) || is.null(sd) || sd <= 0)) {
     stop("`m` and `sd` must be provided and valid (sd > 0) when `score_type` is 'custom'.")
   }
-  # Use the shared score_params
-  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-  params$custom <- c(m = m, sd = sd)
+
+  # Fetch shared data
+  valid_types <- get0("score_valid_types", envir = asNamespace("PsychometricCurse"))
+
   # Convert all scores (returns a tibble)
   converted <- convert_standard_score_all(score, score_type, m, sd)
+
   # Initialize a list to store results
-  results_list <- list()
-  # Calculate CIs for each score type and store in the list
-  for (current_type in score_valid_types) {
-    if (current_type == "custom" && (is.null(m) || is.null(sd))) {
-      results_list[[current_type]] <- data.frame(
-        score_type = current_type,
-        value = NA,
-        ci_lower = NA,
-        ci_upper = NA,
-        stringsAsFactors = FALSE
-      )
-      next
-    }
+  results_list <- lapply(valid_types, function(current_type) {
     # Extract the value for the current score_type from the tibble
     converted_score <- converted$value[converted$score_type == current_type]
-    if (length(converted_score) == 0 || is.na(converted_score)) {
-      results_list[[current_type]] <- data.frame(
+
+    # Handle NA or missing values
+    if (is.na(converted_score) || length(converted_score) == 0) {
+      return(data.frame(
         score_type = current_type,
         value = NA,
         ci_lower = NA,
         ci_upper = NA,
         stringsAsFactors = FALSE
-      )
-      next
+      ))
     }
-    # Calculate CI for custom type
+
+    # Calculate CI for each score type
     if (current_type == "custom") {
       ci_result <- calc_ci(converted_score, m = m, sd = sd, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
     } else {
       ci_result <- calc_ci(converted_score, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
     }
-    results_list[[current_type]] <- data.frame(
+
+    data.frame(
       score_type = current_type,
       value = converted_score,
       ci_lower = ci_result[1],
       ci_upper = ci_result[2],
       stringsAsFactors = FALSE
     )
-  }
+  })
+
   # Combine all results into a single tibble
   result_tibble <- do.call(rbind, results_list)
   rownames(result_tibble) <- NULL
+
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
