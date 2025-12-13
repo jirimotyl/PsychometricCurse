@@ -10,6 +10,8 @@ In the world of psychological assessment, the term "curse" takes on a metaphoric
 
 This package is named **PsychometricCurse** to serve as a permanent reminder: **Diagnoses, like curses, can stick.** They shape how people see themselves and how others see them, often long after the assessment is over. The power to apply such labels is not to be taken lightly.
 
+**Note:** The name is also a play on words—"curse" sounds like "course," as this package allows you to easily apply Reliable Change Index (RCI) and other concepts to evaluate change in scores over time.
+
 ### What This Package Offers
 This package provides tools that are still underused in everyday practice, including:
 - Automatic calculation of confidence intervals around scores,
