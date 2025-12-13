@@ -28,7 +28,7 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
   }
   # Use the shared score_params
   params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-  params$custom <- c(mean = m, sd = sd)
+  params$custom <- c(m = m, sd = sd)
   # Convert all scores (returns a tibble)
   converted <- convert_standard_score_all(score, score_type, m, sd)
   # Initialize a list to store results

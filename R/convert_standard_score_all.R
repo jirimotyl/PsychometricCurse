@@ -25,7 +25,7 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
   }
   # Use the shared score_params
   params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-  params$custom <- c(mean = m, sd = sd)
+  params$custom <- c(m = m, sd = sd)
   # Helper function to convert between two types
   convert <- function(s, from, to, m, sd) {
     tryCatch({
@@ -33,14 +33,14 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
         if (s < 0 || s > 100) stop("Percentile must be between 0 and 100.")
         z_score <- qnorm(s / 100)
       } else if (from %in% c("sten", "stanine")) {
-        z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
+        z_score <- (s - params[[from]]["m"]) / params[[from]]["sd"]
       } else {
-        z_score <- (s - params[[from]]["mean"]) / params[[from]]["sd"]
+        z_score <- (s - params[[from]]["m"]) / params[[from]]["sd"]
       }
       if (to == "percentile") {
         converted_s <- pmin(pmax(pnorm(z_score) * 100, 0), 100)
       } else {
-        converted_s <- params[[to]]["mean"] + params[[to]]["sd"] * z_score
+        converted_s <- params[[to]]["m"] + params[[to]]["sd"] * z_score
         if (to == "sten") {
           converted_s <- round(converted_s)
           converted_s <- pmin(pmax(converted_s, 1), 10)

@@ -63,10 +63,10 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
     if (is.null(params[[score_type]])) {
       stop("Invalid score_type. See documentation for valid types.")
     }
-    if (is.null(params[[score_type]]["mean"]) || is.null(params[[score_type]]["sd"])) {
+    if (is.null(params[[score_type]]["m"]) || is.null(params[[score_type]]["sd"])) {
       stop("score_type must have defined mean and sd in score_params.")
     }
-    m <- params[[score_type]]["mean"]
+    m <- params[[score_type]]["m"]
     sd <- params[[score_type]]["sd"]
   }
 
