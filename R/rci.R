@@ -45,7 +45,7 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
   # Load external data
   params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
   lang_supported <- get0("lang_supported", envir = asNamespace("PsychometricCurse"))
-  rci_labels <- get0("translated_texts", envir = asNamespace("PsychometricCurse"))
+  rci_labels <- get0("rci_labels", envir = asNamespace("PsychometricCurse"))
 
   if (!(lang %in% lang_supported)) {
     stop("Unsupported language. Supported languages are: ", toString(lang_supported))
