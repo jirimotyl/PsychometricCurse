@@ -29,7 +29,7 @@
 #' # Example with time parameter for time-based test
 #' rci(total_score = 85, total_score_old = 90, score_type = "t_score", time = TRUE)
 
-rci <- function(total_score, total_score_old, score_type = NULL, m = NULL, sd = NULL, rel = 0.85, rel_old = NULL, rtm = TRUE, ci = 95, rci_method = 1, lang = "en", time = FALSE) {
+rci_old <- function(total_score, total_score_old, score_type = NULL, m = NULL, sd = NULL, rel = 0.85, rel_old = NULL, rtm = TRUE, ci = 95, rci_method = 1, lang = "en", time = FALSE) {
   # Early parameter validation
   if (is.na(total_score) || is.na(total_score_old)) {
     return(NA)
