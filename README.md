@@ -1,6 +1,6 @@
 # PsychometricCurse
 
-## Why is it called a "curse"?
+## Why is it called a "curse", PsychometricCurse?
 
 Wikipedia defines a **curse** as:
 > *Any expressed wish that some form of adversity or misfortune will befall or attach to one or more persons, a place, or an object. In particular, "curse" may refer to such a wish or pronouncement made effective by a supernatural or spiritual power, such as a god or gods, a spirit, or a natural force, or else as a kind of spell by magic (usually black magic or dark magic) or witchcraft; in the latter sense, a curse can also be called a hex or a jinx. In many belief systems, the curse itself (or accompanying ritual) is considered to have some causative force in the result. To reverse or eliminate a curse is sometimes called "removal" or "breaking", as the spell has to be dispelled, and often requires elaborate rituals or prayers.*
@@ -10,7 +10,7 @@ In the world of psychological assessment, the term "curse" takes on a metaphoric
 
 This package is named **PsychometricCurse** to serve as a permanent reminder: **Diagnoses, like curses, can stick.** They shape how people see themselves and how others see them, often long after the assessment is over. The power to apply such labels is not to be taken lightly.
 
-**Note:** The name is also a play on words—"curse" sounds like "course," as this package allows you to easily apply Reliable Change Index (RCI) and other concepts to evaluate change in scores over time.
+The name is also a play on words: "curse" sounds like "course," as this package allows you to easily apply Reliable Change Index (RCI) and other concepts to evaluate change in scores over time.
 
 ### What This Package Offers
 This package provides tools that are still underused in everyday practice, including:
