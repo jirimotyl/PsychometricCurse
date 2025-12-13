@@ -55,7 +55,7 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
   if (!is.null(score_type) && score_type == "percentile") {
     if (score < 0 || score > 100) stop("Percentile must be between 0 and 100.")
     z_score <- convert_standard_score(score = score, score_type = score_type, target_type = "z_score")
-    m <- params[["z_score"]]$mean
+    m <- params[["z_score"]]$m
     sd <- params[["z_score"]]$sd
     score <- z_score
   } else {
@@ -69,7 +69,7 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
         if (is.null(params[[score_type]])) {
           stop(paste("score_type", score_type, "must have defined mean and sd in score_params."))
         }
-        m <- params[[score_type]]$mean
+        m <- params[[score_type]]$m
         sd <- params[[score_type]]$sd
       } else {
         stop("Unsupported score_type. Use one of: ", paste(names(params), collapse = ", "))
