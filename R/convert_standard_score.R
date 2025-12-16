@@ -3,8 +3,8 @@
 #' Converts a score from one standard type to another. Supported score types include t_score, scaled, iq, sten, stanine, z_score, percentile, and custom distributions defined by mean (m) and standard deviation (sd).
 #'
 #' @param score A numeric value representing the score to convert.
-#' @param score_type A character string specifying the type of the input score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
-#' @param target_type A character string specifying the type of the output score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
+#' @param score_type A character string specifying the type of the input score. Must be one of the names in the package's `score_params` list. E.g. "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
+#' @param target_type A character string specifying the type of the output score.  Must be one of the names in the package's `score_params` list. E.g. "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".
 #' @param m Optional numeric value specifying the mean for a custom distribution. Required if `score_type` or `target_type` is "custom".
 #' @param sd Optional numeric value specifying the standard deviation for a custom distribution. Required if `score_type` or `target_type` is "custom".
 #' @return A numeric value representing the converted score.
@@ -14,8 +14,9 @@
 #' convert_standard_score(120, score_type = "iq", target_type = "stanine")
 #' convert_standard_score(75, score_type = "custom", target_type = "z_score", m = 80, sd = 5)
 convert_standard_score <- function(score, score_type, target_type, m = NULL, sd = NULL) {
-  score_type <- match.arg(score_type, choices = score_valid_types)
-  target_type <- match.arg(target_type, choices = score_valid_types)
+  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
+  score_type <- match.arg(score_type, choices = names(score_params))
+  target_type <- match.arg(target_type, choices = names(score_params))
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
   # Validate custom parameters
@@ -29,8 +30,7 @@ convert_standard_score <- function(score, score_type, target_type, m = NULL, sd 
     }
   }
   # Use the shared score_params
-  params <- get0("score_params", envir = asNamespace("PsychometricCurse"))
-  params$custom <- c(m = m, sd = sd)
+  params$custom <- list(m = m, sd = sd)
   # Vectorized conversion
   converted_score <- sapply(score, function(s) {
     # Convert the input score to a z-score

@@ -27,6 +27,11 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
   if (!is.logical(rtm)) stop("rtm must be logical.")
   if (!is.numeric(ci) || ci < 0 || ci > 100) stop("ci must be numeric and between 0 and 100.")
 
+  # If score_type is not "custom" but m and sd are provided, warn the user
+  if (!is.null(score_type) && score_type != "custom" && (!is.null(m) || !is.null(sd))) {
+    warning("m and sd are ignored when score_type is not 'custom'.")
+  }
+
   # Handle percentile
   if (!is.null(score_type) && score_type == "percentile") {
     if (score < 0 || score > 100) stop("Percentile must be between 0 and 100.")
@@ -41,6 +46,7 @@ calc_ci <- function(score, m = NULL, sd = NULL, score_type = NULL, rel = 0.85, r
       interval_final <- c(z_score - ci_sem, z_score + ci_sem)
     }
     interval_final <- pnorm(interval_final) * 100
+    names(interval_final) <- c("ci_lower", "ci_upper")
     return(interval_final)
   }
 
