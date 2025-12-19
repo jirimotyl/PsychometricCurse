@@ -9,9 +9,9 @@ convert_standard_score(score, score_type, target_type, m = NULL, sd = NULL)
 \arguments{
 \item{score}{A numeric value representing the score to convert.}
 
-\item{score_type}{A character string specifying the type of the input score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
+\item{score_type}{A character string specifying the type of the input score. Must be one of the names in the package's `score_params` list. E.g. "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
-\item{target_type}{A character string specifying the type of the output score. Must be one of "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
+\item{target_type}{A character string specifying the type of the output score.  Must be one of the names in the package's `score_params` list. E.g. "t_score", "scaled", "iq", "sten", "stanine", "z_score", "percentile", or "custom".}
 
 \item{m}{Optional numeric value specifying the mean for a custom distribution. Required if `score_type` or `target_type` is "custom".}
 
