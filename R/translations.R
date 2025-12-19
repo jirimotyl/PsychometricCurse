@@ -8,7 +8,7 @@ lang_supported <- c(
   "en","cs","de"
 )
 
-#' A named list containing translations of various labels used across the package.
+#' A named list containing translations of Z-score evaluations
 #' @noRd
 zscore_labels <- list(
   en = c(
@@ -40,6 +40,8 @@ zscore_labels <- list(
   )
 )
 
+#' A named list containing translations of RCI evaluations
+#' @noRd
 rci_labels <- list(
   en = c(
     "Significant improvement",
@@ -56,4 +58,12 @@ rci_labels <- list(
     "Veränderung nicht bestätigt",
     "Signifikante Verschlechterung"
   )
+)
+
+#' A named list containing translations for interval connectors.
+#' @noRd
+interval_connector <- list(
+  en = "to",
+  cs = "až",
+  de = "bis"
 )

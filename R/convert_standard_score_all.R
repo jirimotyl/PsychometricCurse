@@ -23,6 +23,11 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
 
+  # Validate custom parameters if needed
+  if ((score_type == "custom") && (is.null(m) || is.null(sd) || sd <= 0)) {
+    stop("`m` and `sd` must be provided and valid (sd > 0) when `score_type` is 'custom'.")
+  }
+
   # Initialize a list to store results
   results_list <- lapply(valid_types, function(to) {
     if (to == score_type) {
@@ -31,9 +36,14 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
     if (to == "custom" && is.null(m) && is.null(sd)) {
       return(data.frame(score_type = to, value = NA, stringsAsFactors = FALSE))
     }
+
+    # Only pass m and sd if to or score_type is "custom"
+    current_m <- if (to == "custom" || score_type == "custom") m else NULL
+    current_sd <- if (to == "custom" || score_type == "custom") sd else NULL
+
     # Use convert_standard_score for each conversion
     converted_score <- tryCatch(
-      convert_standard_score(score, score_type, to, m, sd),
+      convert_standard_score(score, score_type, to, current_m, current_sd),
       error = function(e) NA
     )
     data.frame(score_type = to, value = converted_score, stringsAsFactors = FALSE)
@@ -46,4 +56,3 @@ convert_standard_score_all <- function(score, score_type, m = NULL, sd = NULL) {
   # Return the result as a tibble
   tibble::as_tibble(result_tibble)
 }
-

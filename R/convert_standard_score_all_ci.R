@@ -22,6 +22,7 @@
 convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL, rel = 0.85, rtm = TRUE, ci = 95) {
   # Validate score
   if (!is.numeric(score)) stop("`score` must be numeric.")
+
   # Validate custom parameters if needed
   if (score_type == "custom" && (is.null(m) || is.null(sd) || sd <= 0)) {
     stop("`m` and `sd` must be provided and valid (sd > 0) when `score_type` is 'custom'.")
@@ -49,7 +50,7 @@ convert_standard_score_all_ci <- function(score, score_type, m = NULL, sd = NULL
       ))
     }
 
-    # Calculate CI for each score type
+    # Only pass m and sd to calc_ci if current_type is "custom"
     if (current_type == "custom") {
       ci_result <- calc_ci(converted_score, m = m, sd = sd, score_type = current_type, rel = rel, rtm = rtm, ci = ci)
     } else {

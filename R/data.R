@@ -21,4 +21,4 @@ score_params <- list(
 #'
 #' A character vector of valid score types used in the package.
 #' @noRd
-score_valid_types <- c("z_score", "t_score", "scaled", "iq", "sten", "stanine", "percentile", "custom")
+score_valid_types <- names(score_params)
