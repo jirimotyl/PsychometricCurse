@@ -11,9 +11,9 @@
 #' @param rtm A logical value indicating whether to adjust for regression towards the mean (TRUE) or not (FALSE). Default is TRUE.
 #' @param ci A numeric value representing the confidence interval percentage. Default is 95.
 #' @param rci_method An integer value indicating the method to calculate the standard error. Default is 1. Use 1 for Lord & Novick (1968) approach, 2 for Jacobson & Truax (1991) approach.
-#' @param lang A character string specifying the language for the description. Currently supported languages are "en" (English), "cs" (Czech), and "de" (German). Default is "en".
+#' @param lang A character string specifying the language for the description. For example: "en" (English), "cs" (Czech), and "de" (German). Default is "en".
 #' @param time A logical value indicating whether a lower score represents a better result (TRUE for time-based tests). Default is FALSE.
-#' @return A list containing the evaluation result (`evaluation_result`), the tested change (`tested_change`), the standard error (of prediction or difference) with confidence interval (`standard_error_with_CI`), the regression towards the mean adjustment (`regression_towards_mean`), the confidence interval percentage (`confidence_interval`), and the RCI method used (`rci_method`). Returns NA if `score` or `score_old` is NA.
+#' @return A list containing the evaluation result (`evaluation_result`), the tested change in scores (`tested_change`), the standard error (of prediction or difference) with confidence interval, used to evaluate the change in scores (`cutoff`), whether the regression towards the mean was applied (`rtm`), the confidence interval percentage used for calculations (`ci`), and the RCI method used (`rci_method`). Returns NA if `score` or `score_old` is NA.
 #' @export
 #' @examples
 #' # Example with custom M and SD
@@ -51,13 +51,15 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
     stop("Unsupported language. Supported languages are: ", toString(lang_supported))
   }
 
-  # Handle percentile
+  # Handle percentile for both score and score_old
   if (!is.null(score_type) && score_type == "percentile") {
-    if (score < 0 || score > 100) stop("Percentile must be between 0 and 100.")
-    z_score <- convert_standard_score(score = score, score_type = score_type, target_type = "z_score")
+    if (score < 0 || score > 100 || score_old < 0 || score_old > 100) {
+      stop("Percentile must be between 0 and 100 for both score and score_old.")
+    }
+    score <- convert_standard_score(score = score, score_type = score_type, target_type = "z_score")
+    score_old <- convert_standard_score(score = score_old, score_type = score_type, target_type = "z_score")
     m <- params[["z_score"]]$m
     sd <- params[["z_score"]]$sd
-    score <- z_score
   } else {
     # Adjust m and sd based on score_type
     if (!is.null(score_type)) {
@@ -130,9 +132,9 @@ rci <- function(score, score_old, score_type = NULL, m = NULL, sd = NULL, rel = 
   list(
     evaluation_result = eval,
     tested_change = round(tested_change, 2),
-    standard_error_with_CI = round(rci_size, 2),
-    regression_towards_mean = rtm,
-    confidence_interval = ci,
+    cutoff = round(rci_size, 2),
+    rtm = rtm,
+    ci = ci,
     rci_method = rci_method
   )
 }
