@@ -37,12 +37,12 @@ rci(
 
 \item{rci_method}{An integer value indicating the method to calculate the standard error. Default is 1. Use 1 for Lord & Novick (1968) approach, 2 for Jacobson & Truax (1991) approach.}
 
-\item{lang}{A character string specifying the language for the description. Currently supported languages are "en" (English), "cs" (Czech), and "de" (German). Default is "en".}
+\item{lang}{A character string specifying the language for the description. For example: "en" (English), "cs" (Czech), and "de" (German). Default is "en".}
 
 \item{time}{A logical value indicating whether a lower score represents a better result (TRUE for time-based tests). Default is FALSE.}
 }
 \value{
-A list containing the evaluation result (`evaluation_result`), the tested change (`tested_change`), the standard error (of prediction or difference) with confidence interval (`standard_error_with_CI`), the regression towards the mean adjustment (`regression_towards_mean`), the confidence interval percentage (`confidence_interval`), and the RCI method used (`rci_method`). Returns NA if `score` or `score_old` is NA.
+A list containing the evaluation result (`evaluation_result`), the tested change in scores (`tested_change`), the standard error (of prediction or difference) with confidence interval, used to evaluate the change in scores (`cutoff`), whether the regression towards the mean was applied (`rtm`), the confidence interval percentage used for calculations (`ci`), and the RCI method used (`rci_method`). Returns NA if `score` or `score_old` is NA.
 }
 \description{
 This function calculates and returns the reliable change index, indicating whether the change in scores is statistically significant. It handles both single and two-test scenarios based on the provided parameters and supports different standard score types.
